@@ -1,0 +1,651 @@
+%% bare_conf_compsoc.tex
+%% V1.4b
+%% 2015/08/26
+%% by Michael Shell
+%% See:
+%% http://www.michaelshell.org/
+%% for current contact information.
+%%
+%% This is a skeleton file demonstrating the use of IEEEtran.cls
+%% (requires IEEEtran.cls version 1.8b or later) with an IEEE Computer
+%% Society conference paper.
+%%
+%% Support sites:
+%% http://www.michaelshell.org/tex/ieeetran/
+%% http://www.ctan.org/pkg/ieeetran
+%% and
+%% http://www.ieee.org/
+
+%%*************************************************************************
+%% Legal Notice:
+%% This code is offered as-is without any warranty either expressed or
+%% implied; without even the implied warranty of MERCHANTABILITY or
+%% FITNESS FOR A PARTICULAR PURPOSE! 
+%% User assumes all risk.
+%% In no event shall the IEEE or any contributor to this code be liable for
+%% any damages or losses, including, but not limited to, incidental,
+%% consequential, or any other damages, resulting from the use or misuse
+%% of any information contained here.
+%%
+%% All comments are the opinions of their respective authors and are not
+%% necessarily endorsed by the IEEE.
+%%
+%% This work is distributed under the LaTeX Project Public License (LPPL)
+%% ( http://www.latex-project.org/ ) version 1.3, and may be freely used,
+%% distributed and modified. A copy of the LPPL, version 1.3, is included
+%% in the base LaTeX documentation of all distributions of LaTeX released
+%% 2003/12/01 or later.
+%% Retain all contribution notices and credits.
+%% ** Modified files should be clearly indicated as such, including  **
+%% ** renaming them and changing author support contact information. **
+%%*************************************************************************
+
+
+% *** Authors should verify (and, if needed, correct) their LaTeX system  ***
+% *** with the testflow diagnostic prior to trusting their LaTeX platform ***
+% *** with production work. The IEEE's font choices and paper sizes can   ***
+% *** trigger bugs that do not appear when using other class files.       ***                          ***
+% The testflow support page is at:
+% http://www.michaelshell.org/tex/testflow/
+
+
+
+\documentclass[conference,compsoc, 11pt]{IEEEtran}
+
+% Some/most Computer Society conferences require the compsoc mode option,
+% but others may want the standard conference format.
+%
+% If IEEEtran.cls has not been installed into the LaTeX system files,
+% manually specify the path to it like:
+% \documentclass[conference,compsoc]{../sty/IEEEtran}
+
+
+
+
+
+% Some very useful LaTeX packages include:
+% (uncomment the ones you want to load)
+
+
+% *** MISC UTILITY PACKAGES ***
+%
+%\usepackage{ifpdf}
+% Heiko Oberdiek's ifpdf.sty is very useful if you need conditional
+% compilation based on whether the output is pdf or dvi.
+% usage:
+% \ifpdf
+%   % pdf code
+% \else
+%   % dvi code
+% \fi
+% The latest version of ifpdf.sty can be obtained from:
+% http://www.ctan.org/pkg/ifpdf
+% Also, note that IEEEtran.cls V1.7 and later provides a builtin
+% \ifCLASSINFOpdf conditional that works the same way.
+% When switching from latex to pdflatex and vice-versa, the compiler may
+% have to be run twice to clear warning/error messages.
+
+% *** CITATION PACKAGES ***
+%
+\ifCLASSOPTIONcompsoc
+  % IEEE Computer Society needs nocompress option
+  % requires cite.sty v4.0 or later (November 2003)
+  \usepackage[nocompress]{cite}
+\else
+  % normal IEEE
+  \usepackage{cite}
+\fi
+% cite.sty was written by Donald Arseneau
+% V1.6 and later of IEEEtran pre-defines the format of the cite.sty package
+% \cite{} output to follow that of the IEEE. Loading the cite package will
+% result in citation numbers being automatically sorted and properly
+% "compressed/ranged". e.g., [1], [9], [2], [7], [5], [6] without using
+% cite.sty will become [1], [2], [5]--[7], [9] using cite.sty. cite.sty's
+% \cite will automatically add leading space, if needed. Use cite.sty's
+% noadjust option (cite.sty V3.8 and later) if you want to turn this off
+% such as if a citation ever needs to be enclosed in parenthesis.
+% cite.sty is already installed on most LaTeX systems. Be sure and use
+% version 5.0 (2009-03-20) and later if using hyperref.sty.
+% The latest version can be obtained at:
+% http://www.ctan.org/pkg/cite
+% The documentation is contained in the cite.sty file itself.
+%
+% Note that some packages require special options to format as the Computer
+% Society requires. In particular, Computer Society  papers do not use
+% compressed citation ranges as is done in typical IEEE papers
+% (e.g., [1]-[4]). Instead, they list every citation separately in order
+% (e.g., [1], [2], [3], [4]). To get the latter we need to load the cite
+% package with the nocompress option which is supported by cite.sty v4.0
+% and later.
+
+% *** GRAPHICS RELATED PACKAGES ***
+%
+\ifCLASSINFOpdf
+  \usepackage[pdftex]{graphicx}
+  % declare the path(s) where your graphic files are
+  \graphicspath{{Images/}}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+  % \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+\else
+  % or other class option (dvipsone, dvipdf, if not using dvips). graphicx
+  % will default to the driver specified in the system graphics.cfg if no
+  % driver is specified.
+  \usepackage[dvips]{graphicx}
+  % declare the path(s) where your graphic files are
+  \graphicspath{{Images/}}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+  % \DeclareGraphicsExtensions{.eps}
+\fi
+
+\usepackage{adjustbox}
+\usepackage{caption}
+\usepackage{tabulary}
+\usepackage[para]{threeparttable}
+\usepackage{array,booktabs,longtable,tabularx}
+\usepackage{float}
+\usepackage[most]{tcolorbox}
+
+% *** MATH PACKAGES ***
+%
+\usepackage{amsmath}
+% A popular package from the American Mathematical Society that provides
+% many useful and powerful commands for dealing with mathematics.
+%
+% Note that the amsmath package sets \interdisplaylinepenalty to 10000
+% thus preventing page breaks from occurring within multiline equations. Use:
+%\interdisplaylinepenalty=2500
+% after loading amsmath to restore such page breaks as IEEEtran.cls normally
+% does. amsmath.sty is already installed on most LaTeX systems. The latest
+% version and documentation can be obtained at:
+% http://www.ctan.org/pkg/amsmath
+
+
+
+
+
+% *** SPECIALIZED LIST PACKAGES ***
+%
+%\usepackage{algorithmic}
+% algorithmic.sty was written by Peter Williams and Rogerio Brito.
+% This package provides an algorithmic environment fo describing algorithms.
+% You can use the algorithmic environment in-text or within a figure
+% environment to provide for a floating algorithm. Do NOT use the algorithm
+% floating environment provided by algorithm.sty (by the same authors) or
+% algorithm2e.sty (by Christophe Fiorio) as the IEEE does not use dedicated
+% algorithm float types and packages that provide these will not provide
+% correct IEEE style captions. The latest version and documentation of
+% algorithmic.sty can be obtained at:
+% http://www.ctan.org/pkg/algorithms
+% Also of interest may be the (relatively newer and more customizable)
+% algorithmicx.sty package by Szasz Janos:
+% http://www.ctan.org/pkg/algorithmicx
+
+
+
+
+% *** ALIGNMENT PACKAGES ***
+%
+%\usepackage{array}
+% Frank Mittelbach's and David Carlisle's array.sty patches and improves
+% the standard LaTeX2e array and tabular environments to provide better
+% appearance and additional user controls. As the default LaTeX2e table
+% generation code is lacking to the point of almost being broken with
+% respect to the quality of the end results, all users are strongly
+% advised to use an enhanced (at the very least that provided by array.sty)
+% set of table tools. array.sty is already installed on most systems. The
+% latest version and documentation can be obtained at:
+% http://www.ctan.org/pkg/array
+
+
+% IEEEtran contains the IEEEeqnarray family of commands that can be used to
+% generate multiline equations as well as matrices, tables, etc., of high
+% quality.
+
+
+
+
+% *** SUBFIGURE PACKAGES ***
+%\ifCLASSOPTIONcompsoc
+%  \usepackage[caption=false,font=footnotesize,labelfont=sf,textfont=sf]{subfig}
+%\else
+%  \usepackage[caption=false,font=footnotesize]{subfig}
+%\fi
+% subfig.sty, written by Steven Douglas Cochran, is the modern replacement
+% for subfigure.sty, the latter of which is no longer maintained and is
+% incompatible with some LaTeX packages including fixltx2e. However,
+% subfig.sty requires and automatically loads Axel Sommerfeldt's caption.sty
+% which will override IEEEtran.cls' handling of captions and this will result
+% in non-IEEE style figure/table captions. To prevent this problem, be sure
+% and invoke subfig.sty's "caption=false" package option (available since
+% subfig.sty version 1.3, 2005/06/28) as this is will preserve IEEEtran.cls
+% handling of captions.
+% Note that the Computer Society format requires a sans serif font rather
+% than the serif font used in traditional IEEE formatting and thus the need
+% to invoke different subfig.sty package options depending on whether
+% compsoc mode has been enabled.
+%
+% The latest version and documentation of subfig.sty can be obtained at:
+% http://www.ctan.org/pkg/subfig
+
+
+
+
+% *** FLOAT PACKAGES ***
+%
+%\usepackage{fixltx2e}
+% fixltx2e, the successor to the earlier fix2col.sty, was written by
+% Frank Mittelbach and David Carlisle. This package corrects a few problems
+% in the LaTeX2e kernel, the most notable of which is that in current
+% LaTeX2e releases, the ordering of single and double column floats is not
+% guaranteed to be preserved. Thus, an unpatched LaTeX2e can allow a
+% single column figure to be placed prior to an earlier double column
+% figure.
+% Be aware that LaTeX2e kernels dated 2015 and later have fixltx2e.sty's
+% corrections already built into the system in which case a warning will
+% be issued if an attempt is made to load fixltx2e.sty as it is no longer
+% needed.
+% The latest version and documentation can be found at:
+% http://www.ctan.org/pkg/fixltx2e
+
+
+%\usepackage{stfloats}
+% stfloats.sty was written by Sigitas Tolusis. This package gives LaTeX2e
+% the ability to do double column floats at the bottom of the page as well
+% as the top. (e.g., "\begin{figure*}[!b]" is not normally possible in
+% LaTeX2e). It also provides a command:
+%\fnbelowfloat
+% to enable the placement of footnotes below bottom floats (the standard
+% LaTeX2e kernel puts them above bottom floats). This is an invasive package
+% which rewrites many portions of the LaTeX2e float routines. It may not work
+% with other packages that modify the LaTeX2e float routines. The latest
+% version and documentation can be obtained at:
+% http://www.ctan.org/pkg/stfloats
+% Do not use the stfloats baselinefloat ability as the IEEE does not allow
+% \baselineskip to stretch. Authors submitting work to the IEEE should note
+% that the IEEE rarely uses double column equations and that authors should try
+% to avoid such use. Do not be tempted to use the cuted.sty or midfloat.sty
+% packages (also by Sigitas Tolusis) as the IEEE does not format its papers in
+% such ways.
+% Do not attempt to use stfloats with fixltx2e as they are incompatible.
+% Instead, use Morten Hogholm'a dblfloatfix which combines the features
+% of both fixltx2e and stfloats:
+%
+% \usepackage{dblfloatfix}
+% The latest version can be found at:
+% http://www.ctan.org/pkg/dblfloatfix
+
+
+
+
+% *** PDF, URL AND HYPERLINK PACKAGES ***
+%
+%\usepackage{url}
+% url.sty was written by Donald Arseneau. It provides better support for
+% handling and breaking URLs. url.sty is already installed on most LaTeX
+% systems. The latest version and documentation can be obtained at:
+% http://www.ctan.org/pkg/url
+% Basically, \url{my_url_here}.
+
+
+
+
+% *** Do not adjust lengths that control margins, column widths, etc. ***
+% *** Do not use packages that alter fonts (such as pslatex).         ***
+% There should be no need to do such things with IEEEtran.cls V1.6 and later.
+% (Unless specifically asked to do so by the journal or conference you plan
+% to submit to, of course. )
+
+
+% correct bad hyphenation here
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+
+\begin{document}
+%
+% paper title
+% Titles are generally capitalized except for words such as a, an, and, as,
+% at, but, by, for, in, nor, of, on, or, the, to and up, which are usually
+% not capitalized unless they are the first or last word of the title.
+% Linebreaks \\ can be used within to get better formatting as desired.
+% Do not put math or special symbols in the title.
+\title{Deep Q-Learning for Connect Four}
+
+
+% author names and affiliations
+% use a multiple column layout for up to three different
+% affiliations
+\author{\IEEEauthorblockN{Mushahid Khan}
+\IEEEauthorblockA{Department of Computer Science\\
+Ryerson University\\
+Email: mushahid.khan@ryerson.ca}
+\and
+\IEEEauthorblockN{Ahmed Aldaeni}
+\IEEEauthorblockA{Department of Computer Science\\
+Ryerson University\\
+Email: ahmed.aldaeni@ryerson.ca}
+\and
+\IEEEauthorblockN{Sarah Sohana}
+\IEEEauthorblockA{Department of Computer Science\\
+Ryerson University\\
+Email: sarah.sohana@ryerson.ca}}
+
+% conference papers do not typically use \thanks and this command
+% is locked out in conference mode. If really needed, such as for
+% the acknowledgment of grants, issue a \IEEEoverridecommandlockouts
+% after \documentclass
+
+% for over three affiliations, or if they all won't fit within the width
+% of the page (and note that there is less available width in this regard for
+% compsoc conferences compared to traditional conferences), use this
+% alternative format:
+% 
+%\author{\IEEEauthorblockN{Michael Shell\IEEEauthorrefmark{1},
+%Homer Simpson\IEEEauthorrefmark{2},
+%James Kirk\IEEEauthorrefmark{3}, 
+%Montgomery Scott\IEEEauthorrefmark{3} and
+%Eldon Tyrell\IEEEauthorrefmark{4}}
+%\IEEEauthorblockA{\IEEEauthorrefmark{1}School of Electrical and Computer Engineering\\
+%Georgia Institute of Technology,
+%Atlanta, Georgia 30332--0250\\ Email: see http://www.michaelshell.org/contact.html}
+%\IEEEauthorblockA{\IEEEauthorrefmark{2}Twentieth Century Fox, Springfield, USA\\
+%Email: homer@thesimpsons.com}
+%\IEEEauthorblockA{\IEEEauthorrefmark{3}Starfleet Academy, San Francisco, California 96678-2391\\
+%Telephone: (800) 555--1212, Fax: (888) 555--1212}
+%\IEEEauthorblockA{\IEEEauthorrefmark{4}Tyrell Inc., 123 Replicant Street, Los Angeles, California 90210--4321}}
+
+
+
+
+% use for special paper notices
+%\IEEEspecialpapernotice{(Invited Paper)}
+
+
+
+
+% make the title area
+\maketitle
+
+% As a general rule, do not put math, special symbols or citations
+% in the abstract
+\begin{abstract}
+Connect Four is a two-player board game in which the players choose a colour and then take turns dropping coloured discs into a seven-column, six-row vertically suspended grid. The pieces fall straight down, occupying the lowest available space within the column. The objective of the game is to be the first to form a horizontal, vertical, or diagonal line of four of one's discs. Connect Four is a solved game. The first player can always win by playing the right moves. This paper presents the use of reinforcement learning for teaching an agent to play Connect Four. Two reinforcement learning techniques, Deep Q-learning with Multilayer Perceptron and Deep Q-Learning with Recurrent Neural Network, are used for the training. These two techniques are optimized to give the best results possible and then two agents use the techniques to play Connect Four against each other.
+% The abstract goes here.
+\end{abstract}
+
+% no keywords
+
+
+
+
+% For peer review papers, you can put extra information on the cover
+% page as needed:
+% \ifCLASSOPTIONpeerreview
+% \begin{center} \bfseries EDICS Category: 3-BBND \end{center}
+% \fi
+%
+% For peerreview papers, this IEEEtran command inserts a page break and
+% creates the second title. It will be ignored for other modes.
+\IEEEpeerreviewmaketitle
+\section{Introduction}
+The problem that we tackled for this project was to train an agent to play the game of Connect Four. Connect Four is a two player strategy game where each player has their own coloured discs. Players alternate in selecting a slot on the board to drop the disc in to get four of their coloured discs in a row, either horizontal, vertical or diagonal. The game of Connect Four can be seen in figure 1. \par
+\begin{figure}[h!]
+\centering
+\includegraphics[width=3.0in]{c4.jpeg}
+\caption{Connect Four Game}
+\label{Capture}
+\end{figure}
+We chose to do this project because learning to play board games has a long tradition in the field of artificial intelligence. This is due to most board games having simple rules, nevertheless, encode surprisingly complex decision-making situations. Training an agent to learn the many strategies is of great interest and a great way for us to implement the lessons in this course. 
+Connect Four may appear to be simple and straightforward. However,  a great number of strategies can be used to increase or even guarantee the likelihood of winning. The thing that sparked the most interest for us was how different learning strategies will do in Connect Four when they would compete against each other. Can a simple learning strategy be effective against a more complicated one?
+
+From this project, we learned a great deal about different game environments in which we can train our agent, various libraries in the Python language that we can use to implement different models for an agent with ease and practical implementation of numerous lessons learned in this course. \par
+This report will go over the problem statement of Connect Four in detail, explaining the rules as well as the overall goal of the game,the environment used to build the game, the dataset obtained for training, models that agents used and analysis of the models to choose the best one.
+
+
+% You must have at least 2 lines in the paragraph with the drop letter
+% (should never be an issue)
+\section{Problem Statement, Environment \& Dataset}
+\subsection{Problem Statement}
+Our project trains an agent to find an optimal strategy for playing Connect Four. An optimal strategy is a sequence of actions which will maximise the probability of the agent to win a game. \par
+Connect Four is played on a board in which there are seven hollow columns and six rows. There is a hole for each column at the top of the board, where the pieces are dropped. The piece will land either on the lowest row or the row above the piercing which was last played in that column. Two players play this game where each one has 21 pieces that look like coins. Each player has pieces of a different colour to the other player. \par
+A player will have at most seven actions available. The possible actions will depend on how many columns are full on the board. The number of possible actions can be calculated as 7 minus the number of full columns at the current state. The state space is the board with the played pieces. The upper bound on the number of states is 3$^{42}$, as the board size is 6 rows by 7 columns and each spot on the board can be free, occupied by player one or occupied by player two.  The reward that an agent receives will be determined by whether or not if they won the game. They will get a reward of 1 if they won the game and 0 otherwise.\par
+At the start of a game, the board is empty. Both players will try to make a straight line of four of their own pieces with no gaps between them. This line can be horizontal, vertical or diagonal. Each player makes a move alternatively, one by one.  When a player makes a straight line of four of their own pieces with no gaps, the game is over, and the player who connected the four pieces wins. In figure 2, it can be seen that the player with the red pieces wins by getting four pieces straight diagonally. Alternatively, if all of the pieces have been played, the board is full and called a tie.
+\begin{figure}[h!]
+\centering
+\includegraphics[width=2.5in]{image2.png}
+\caption{Connect Four game won}
+\label{Capture}
+\end{figure}
+\subsection{Environment}
+For this project, we used the OpenAI gym library for the environment. OpenAI gym is a library that gives a number of test environments to work on for different reinforcement learning algorithms. This will allow us to get observations from and send actions to the game environment without actually building the Connect Four game ourselves. This will also allow the simulation of two agents playing against each other.  In particular, we used the gym-connect4 environment for this project.
+
+\subsection{Dataset}
+To collect training data, we used a simulator. In this, two agents played against each other in the OpenAI gym environment for 1000 games. We measured the two agents’ performance by recording the percentage of games won by both agents and the percentage of draws. We obtained the different states for each game from the environment and recorded them as well as whether each state resulted in a win for a player, draw or the game not being finished. Each state is a six by seven matrix representing the Connect Four board. Each entry in the matrix can be a zero, positive one or a negative one. An entry of zero means that the position is unoccupied, an entry of positive one means that the position is occupied by the first player who takes an action and an entry of negative one means that the position is occupied by the other player. 
+
+In the simulation between the two agents, a random strategy was used. In this strategy, random action is chosen from the available actions given the current state. In other words, a random column would be chosen by an agent from the ones available to drop their coloured piece in. In this, the player who made the first move won 51\% of the games and the other player won 49\% of the games.
+
+To train the Deep Q-Learning models on the data collected from each game, we flattened each state in the training data into a vector of dimension 
+\stackunder{\sss 1\times 42}.
+\section{Methods and Models}
+For this project, we were interested in training an agent using Deep Q-Learning and seeing its effectiveness for playing Connect Four. In particular, we wanted to compare the effectiveness of the following two types of Deep Q-Learning models and pick the better one of the two: Deep Q-Learning with a Multilayer Perceptron (MLP) and Deep Q-Learning with a Recurrent Neural Network (RNN). We chose to implement and compare the effectiveness of these two models, because we wanted to see if a simple model like MLP can go toe to toe with a more complex model like RNN. 
+
+\subsection{Deep-Q Learning}
+Deep Q-Learning is one of the most important algorithms in Reinforcement Learning. In Deep Q-Learning, neural networks are used to approximate the Q-value function. Neural networks are a series of algorithms that mimic the operations of a human brain to recognize relationships between vast amounts of data.  The Q-value function tells us how good an action is for an agent who follows a particular policy, given a state. Deep Q-Learning incorporates deep neural networks to approximate the Q-value function. It allows an agent to interact with the environment to learn over time through repeated observations, actions, and rewards.
+
+The Deep Q-Learning will accept states from a given environment as input. For each state input, the Deep Q-Learning network will estimate Q values for each action that can be taken from that state. The Deep Q-Learning network’s job is to estimate the optimal Q-value function, satisfying the Bellman equation. Q values are updated using the following rule:
+\begin{figure}[h!]
+\centering
+\includegraphics[width=3.0in]{tests.png}
+\label{Capture}
+\end{figure}
+\subsection{Deep Q-Learning with MLP}
+MLP is a class of feedforward artificial neural networks (ANN). It refers to a network composed of multiple layers of perceptrons. MLP is sometimes referred to as a vanilla neural network, especially when it has a single hidden layer. MLP consists of at least three layers of nodes: an input layer, a hidden layer and an output layer. Each node in the hidden and output layer, acts as a neuron which uses a nonlinear activation function. MLP utilizes a supervised learning technique called backpropagation for training. The overall process of a Deep Q-Learning with MLP can be seen below in figure 3.
+\begin{figure}[h!]
+\centering
+\includegraphics[width=3.5in]{image8.png}
+\caption{Process of Deep Q-Learning with MLP}
+\label{Capture}
+\end{figure}
+
+To implement Deep Q-Learning with MLP, Keras library’s sequential API from Tensorflow was used. Tensorflow is an open-source library to help develop and train machine learning models. It mainly focuses on training deep neural networks. The  Sequential  API  enables the creation of models layer by layer. \para
+
+For this project, we added two types of hidden layers: Dense and Dropout. The dense layer is a regular densely connected neural network layer. The dropout layer enables a randomly selected percentage of neurons to be ignored during training. This means that their contribution to the activation of downstream neurons is temporarily removed on the forward pass. Any weight updates are not applied to the neuron on the backward pass. Dropout forces a neural network to learn more robust features useful in conjunction with many different random subsets of the other neurons. After trying different values for the dropout, the number that gave us the best results was a rate of 0.4. For this project, the following architecture  in figure 4 was used for Deep Q-Learning with MLP:
+\begin{figure}[h!]
+\centering
+\includegraphics[width=1.4in]{keras.png}
+\caption{Deep Q-Learning with MLP Architecture}
+\label{Capture}
+\end{figure}
+
+
+The input for this network will be a given state of a game. That state will be the six by seven board flattened, resulting in 42 inputs. The output for this network will have three values: the probability that the first player wins the game, the probability there's a draw and the probability that the second player wins the game. The output with the highest values is the one that is considered as the expected outcome of the given game. 
+
+The activation function used in the input and hidden layers is the Rectified Linear Unit (ReLU) function, and the activation function used in the output layer is the softmax function. ReLU is a piecewise linear function that will output the input directly if it is positive, and it will output zero if the input is not positive. It has become the default activation function for many types of neural networks because a model that uses it is easier to train and often achieves better performance. Softmax function outputs a vector that represents the probability distributions of a list of potential outcomes. The input values can be any number, but the Softmax changes them into values between 0 and 1 to be interpreted as probabilities. The ReLU function can be seen in figure 5, and the Softmax function can be seen in figure 6.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=3.2in]{relu.png}
+\caption{ReLU Function}
+\label{Capture}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=2.8in]{softmax.png}
+\caption{Softmax Function}
+\label{Capture}
+\end{figure}
+
+\subsection{Recurrent Neural Network}
+RNN is a type of artificial neural network which uses sequential data or time-series data. Like the MLP, RNN utilizes training data to learn. RNN is distinguished by its “memory” as it takes information from prior inputs to influence the current input and output. While MLP assumes that inputs and outputs are independent of each other, the output of RNN depends on the prior elements within the sequence. RNNs can take one or more input vectors and produce one or more output vectors. The outputs are influenced not just by weights applied on inputs like a regular neural network but also by a hidden state vector representing the context based on prior input/output. So, the same input could produce a different output depending on previous inputs in the series. The architecture of RNN can be seen in figure 7.
+\begin{figure}[h!]
+\centering
+\includegraphics[width=3in]{rnn.png}
+\caption{RNN Architecture}
+\label{Capture}
+\end{figure}
+
+RNN usually does not face any problems in connecting the past information to the current prediction because of its chain-like structure formed due to loops in the network, but if the previous state that is influencing the current prediction is not in the recent past, the RNN model may not be able to predict the current state accurately. This is known as the long-term memory problem. To solve this problem, we used the Long Short Term Memory network (LSTM).
+
+LSTM is a special kind of RNN capable of learning long-term dependencies. A simple RNN has a straightforward structure that forms a chain of repeating modules of a neural network, with just a single activation function such as tanh layer. Similarly the LSTM has a chain-like structure with repeating modules just like RNN, but instead of a single neural network layer line in RNN, the LSTM has four layers which are interacting in a very different way, each performing its unique function in the network.
+
+To implement RNN in our project, we used Keras library’s sequential API. First, we made an object of the sequential model. Then we added the LSTM layer. The input and output for this model are the same as that of Deep Q-Learning with MLP. After fine tuning the parameters of the model, we obtained best results from one LSTM layers,  with a dropout layer of value 0.1. We also found that adding a dense layer right before the output layer helped improve the model's results. The final layer of this model is the output layer which is a fully connected dense layer that uses softmax as the activation function. The architecture used for Deep Q-Learning with RNN can be seen in figure 8.
+\begin{figure}[h!]
+\centering
+\includegraphics[width=1.5in]{t.png}
+\caption{Deep Q-Learning with RNN Architecture}
+\label{Capture}
+\end{figure}
+
+\subsection{Training  the Deep Q-Learning Models}
+To find the  optimal number of games to train an agent using both models, the following steps were taken:
+
+\begin{enumerate}
+    \item Train an agent on different number of games starting from 500 to 15,000 using each model
+    \item On each iteration after training, let the agent play a total of 100 games against another agent that uses a random strategy
+    \item Record the percentage of games won by the model on each iteration
+    \item Pick the iteration with highest win percentage
+\end{enumerate}
+
+The length that allowed the agent using Deep Q-Learning with MLP to win most games, out of 100, against an agent that used the random policy was 14500, as shown in figure 9 below. 95\% of the games were won by the agent using the Deep Q-Learning with MLP model, 4\% of the games were won by the agent using a random policy and 1\% of the games resulted in a draw.
+The length that allowed the agent using Deep Q-Learning with RNN to win most games, out of 100, against an agent that uses the random policy was 13000, as shown in figure 10 below. 94\% of the games were won by the agent using the Deep Q-Learning with RNN  model, 5\% of the games were won by the agent using a random policy and 1\% of the games resulted in a draw.
+\begin{figure}[h!]
+\centering
+\includegraphics[width=3.2in]{image6.png}
+\caption{Percentages of Games Won for MLP}
+\label{Capture}
+\end{figure}
+
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=3.7in]{image7.png}
+\caption{ Percentages of Games Won for RNN}
+\label{Capture}
+\end{figure}
+
+Evaluation Metrics
+To evaluate which Deep Q-Learning model is the better of the two, we used the metric of percentages of games won, out of 100 games, by each model when used against each other. This metric was chosen because it shows how well a model performs given the total number of games played. The higher the value, the better it is for the model.
+\section{Results and Discussion}
+\subsection{
+
+% Note that the IEEE typically puts floats only at the top, even when this
+% results in a large percentage of a column being occupied by floats.
+
+
+% An example of a double column floating figure using two subfigures.
+% (The subfig.sty package must be loaded for this to work.)
+% The subfigure \label commands are set within each subfloat command,
+% and the \label for the overall figure must come after \caption.
+% \hfil is used as a separator to get equal spacing.
+% Watch out that the combined width of all the subfigures on a 
+% line do not exceed the text width or a line break will occur.
+%
+%\begin{figure*}[!t]
+%\centering
+%\subfloat[Case I]{\includegraphics[width=2.5in]{box}%
+%\label{fig_first_case}}
+%\hfil
+%\subfloat[Case II]{\includegraphics[width=2.5in]{box}%
+%\label{fig_second_case}}
+%\caption{Simulation results for the network.}
+%\label{fig_sim}
+%\end{figure*}
+%
+% Note that often IEEE papers with subfigures do not employ subfigure
+% captions (using the optional argument to \subfloat[]), but instead will
+% reference/describe all of them (a), (b), etc., within the main caption.
+% Be aware that for subfig.sty to generate the (a), (b), etc., subfigure
+% labels, the optional argument to \subfloat must be present. If a
+% subcaption is not desired, just leave its contents blank,
+% e.g., \subfloat[].
+
+
+% An example of a floating table. Note that, for IEEE style tables, the
+% \caption command should come BEFORE the table and, given that table
+% captions serve much like titles, are usually capitalized except for words
+% such as a, an, and, as, at, but, by, for, in, nor, of, on, or, the, to
+% and up, which are usually not capitalized unless they are the first or
+% last word of the caption. Table text will default to \footnotesize as
+% the IEEE normally uses this smaller font for tables.
+% The \label must come after \caption as always.
+%
+%\begin{table}[!t]
+%% increase table row spacing, adjust to taste
+%\renewcommand{\arraystretch}{1.3}
+% if using array.sty, it might be a good idea to tweak the value of
+% \extrarowheight as needed to properly center the text within the cells
+%\caption{An Example of a Table}
+%\label{table_example}
+%\centering
+%% Some packages, such as MDW tools, offer better commands for making tables
+%% than the plain LaTeX2e tabular which is used here.
+%\begin{tabular}{|c||c|}
+%\hline
+%One & Two\\
+%\hline
+%Three & Four\\
+%\hline
+%\end{tabular}
+%\end{table}
+
+
+% Note that the IEEE does not put floats in the very first column
+% - or typically anywhere on the first page for that matter. Also,
+% in-text middle ("here") positioning is typically not used, but it
+% is allowed and encouraged for Computer Society conferences (but
+% not Computer Society journals). Most IEEE journals/conferences use
+% top floats exclusively. 
+% Note that, LaTeX2e, unlike IEEE journals/conferences, places
+% footnotes above bottom floats. This can be corrected via the
+% \fnbelowfloat command of the stfloats package.
+
+\section{Implementation \& Code}
+To  get  ideas  for  the  project  and  its  implementation,  we  looked  at  research  papers  and  blogs.  After looking  through  numerous  sources,  the sources that gave us  our  initial  idea  of  using Deep Q-Learning for Connect Four were [1] and [2]. \para
+
+This  project  was  implemented  in  the  Python language.  For  the  implementation  of  the Deep Q-Learning models,  Keras  li-brary’s Sequential API from Tensorflow was used. Tensorflow is an open source library to help develop and train machine learning models. It particularly focuses on training  deep  neural  networks.  The  Sequential  API  enables the  creation  of  models  layer  by  layer. We were able to understand how to understand and implement the Sequential model by going through the Tensorflow guide on Tensorflow's website [3].
+
+
+
+\begin{thebibliography}{10}
+
+\bibitem{} 
+E.Alderton, E.Wopat, J.Koffman, ``Reinforcement Learning for Connect Four,''
+https://web.stanford.edu/class/aa228/reports/2019/final106.pdf
+
+\bibitem{} 
+``Playing Connect 4 with Deep Q-Learning,
+''Accessed on: Feb 07, 2021.[Online]. Available: https://towardsdatascience.com/playing-connect-4-with-deep-q-learning-76271ed663ca
+
+\end{thebibliography}
+
+% conference papers do not normally have an appendix
+% trigger a \newpage just before the given reference
+% number - used to balance the columns on the last page
+% adjust value as needed - may need to be readjusted if
+% the document is modified later
+%\IEEEtriggeratref{8}
+% The "triggered" command can be changed if desired:
+%\IEEEtriggercmd{\enlargethispage{-5in}}
+
+% references section
+
+% can use a bibliography generated by BibTeX as a .bbl file
+% BibTeX documentation can be easily obtained at:
+% http://mirror.ctan.org/biblio/bibtex/contrib/doc/
+% The IEEEtran BibTeX style support page is at:
+% http://www.michaelshell.org/tex/ieeetran/bibtex/
+%\bibliographystyle{IEEEtran}
+% argument is your BibTeX string definitions and bibliography database(s)
+%\bibliography{IEEEabrv,../bib/paper}
+%
+% <OR> manually copy in the resultant .bbl file
+% set second argument of \begin to the number of references
+% (used to reserve space for the reference number labels box)
+
+
+% that's all folks
+\end{document}
+
+
