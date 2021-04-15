@@ -43,12 +43,17 @@ class SummaryGeneratorClass:
         self.contractionMapping = contractionMapping
 
 
-        for i in range(len(self.news)):
-            self.news[i] = self.textCleaner(self.news[i])
-        for i in range(len(self.summaries)):
-            self.summaries[i] = '_START_ '+ self.textCleaner(self.summaries[i]) + ' _END_'
-
-        self.df = pd.DataFrame({'Text': self.news, 'Summary' : self.summaries})
+#         for i in range(len(self.news)):
+#             self.news[i] = self.textCleaner(self.news[i])
+#         for i in range(len(self.summaries)):
+#             self.summaries[i] = '_START_ '+ self.textCleaner(self.summaries[i]) + ' _END_'
+        self.a = []
+        self.b = []
+        for i in range(0,10):
+            self.a.append(self.textCleaner(self.news[i]))
+        for i in range(0,10):
+            self.b.append('beginmush '+ self.textCleaner(self.summaries[i]) + ' endmush')
+        self.df = pd.DataFrame({'Text': self.a, 'Summary' : self.b})
         
         
     def readNews(self, directory):
@@ -136,26 +141,26 @@ class SummaryGeneratorClass:
         
         self.summaryCount = 0
         for i in self.df['Summary']:
-            if(len(i.split()) <= 200):
+            if(len(i.split()) <= 300):
                 self.summaryCount += 1
         
         self.textCount = 0
         for i in self.df['Text']:
-            if(len(i.split()) <= 350):
+            if(len(i.split()) <= 400):
                 self.textCount += 1
      
-        self.maxTextLen = 350
-        self.maxSummaryLen = 200
+        self.maxTextLen = 400
+        self.maxSummaryLen = 400
         
         cnt=0
         for i in self.df['Summary']:
-            if(len(i.split())<=200):
+            if(len(i.split())<=400):
                 cnt=cnt+1
         print(cnt/len(self.df['Summary']))
 
         cnt=0
         for i in self.df['Text']:
-            if(len(i.split())<=350):
+            if(len(i.split())<=400):
                 cnt=cnt+1
         print(cnt/len(self.df['Text']))
 
@@ -203,7 +208,7 @@ class SummaryGeneratorClass:
         self.xValSeq = self.tokenizerX.texts_to_sequences(self.xVal)
         self.xTrainSeq = pad_sequences(self.xTrainSeq, maxlen=self.maxTextLen, padding='post')
         self.xValSeq = pad_sequences(self.xValSeq, maxlen=self.maxTextLen, padding='post')
-        self.xVocabularySize =  len(self.tokenizerX.word_index) + 1
+        self.xVocabularySize =  self.tokenizerX.num_words + 1
 
         #Summary Tokenizer
         tokenizerY = Tokenizer()
@@ -222,10 +227,10 @@ class SummaryGeneratorClass:
         self.tokenizerY.fit_on_texts(list(self.yTrain))
 
         self.yTrainSeq = self.tokenizerY.texts_to_sequences(self.yTrain) 
-        self.yValSeq = tokenizerX.texts_to_sequences(self.yVal)
+        self.yValSeq = self.tokenizerY.texts_to_sequences(self.yVal)
         self.yTrainSeq = pad_sequences(self.yTrainSeq, maxlen=self.maxSummaryLen, padding='post')
         self.yValSeq = pad_sequences(self.yValSeq, maxlen=self.maxSummaryLen, padding='post')
-        self.yVocabularySize =  len(self.tokenizerY.word_index) + 1    
+        self.yVocabularySize =  self.tokenizerY.num_words + 1    
         
     def getSummaries(self):
         return self.summaries
@@ -243,6 +248,12 @@ def main():
     summaryGeneratorClass.filterDataFrameUsingMaxTextCountAndMaxSummaryCount()
     summaryGeneratorClass .splitData()
     summaryGeneratorClass.tokenizeTrainingData()
+    print(summaryGeneratorClass.xVocabularySize)
+    print(summaryGeneratorClass.yVocabularySize)
     model = TextSummarizationModel(summaryGeneratorClass.xTrainSeq, summaryGeneratorClass.yTrainSeq, summaryGeneratorClass.xValSeq, summaryGeneratorClass.yValSeq, summaryGeneratorClass.xVocabularySize, summaryGeneratorClass.yVocabularySize,summaryGeneratorClass.maxTextLen, summaryGeneratorClass.tokenizerX, summaryGeneratorClass.tokenizerY)
-    return summaryGeneratorClass
+    
+    for i in range(0, 10):
+        print("Text:",model.seq2text(summaryGeneratorClass.xTrainSeq[i]))
+        print("Original summary:",model.seq2summary(summaryGeneratorClass.yTrainSeq[i]))
+        print("Predicted summary:",model.decodeSeq(summaryGeneratorClass.xTrainSeq[i].reshape(1,summaryGeneratorClass.maxTextLen)))
         

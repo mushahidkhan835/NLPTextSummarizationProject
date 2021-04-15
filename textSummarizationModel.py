@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd 
 from pathlib import Path
 import re
+import keras
 from tensorflow.keras.layers import Input, LSTM, Embedding, Dense, Concatenate, TimeDistributed
 from tensorflow.keras.models import Model
 from tensorflow.keras.callbacks import EarlyStopping
@@ -17,12 +18,6 @@ class TextSummarizationModel:
         self.model = self.getModel(xTrain, yTrain, xVal, yVal, xVocabSize, yVocabSize, maxTextLen)
         self.buildDictinaryToConvertIndexToWord(tokenizerX, tokenizerY)
         self.buildInferenceForEncoderDecoder()
-        for i in range(0, 10):
-                print("Text:",self.seq2text(xTrain[i]))
-                print("Original summary:",self.seq2summary(yTrain[i]))
-                print("Predicted summary:",self.decodeSeq(xTrain[i].reshape(1,maxTextLen)))
-                print("\n")
-
         
     def drawModelFromTraining(self):
         pyplot.plot(self.history.history['loss'], label='train') 
@@ -31,9 +26,10 @@ class TextSummarizationModel:
         pyplot.show()
 
     def getModel(self, xTrain, yTrain, xVal, yVal, xVocabSize, yVocabSize, maxTextLen):
-        my_file = Path("/textSumamrizationModel.h5")
+        my_file = Path("./textSumamrizationModel.h5")
         if my_file.is_file(): 
-            self.model = keras.models.load_model('/textSumamrizationModel.h5')
+            self.model = keras.models.load_model('./textSumamrizationModel.h5', custom_objects={'AttentionLayer': AttentionLayer})
+
         else:
             self.encoderInput = Input(shape=(maxTextLen,))
             embL = Embedding(xVocabSize, 200,trainable=True)(self.encoderInput)
@@ -53,8 +49,8 @@ class TextSummarizationModel:
             attnO, attnS = self.attnL([self.encoderOutput, decoderOutputs])
             decoderCInput = Concatenate(axis=-1, name='concat_layer')([decoderOutputs, attnO])
             #dense layer
-            decoder_dense =  TimeDistributed(Dense(yVocabSize, activation='softmax'))
-            decoderOutputs = decoder_dense(decoderCInput)
+            self.decoderDense =  TimeDistributed(Dense(yVocabSize, activation='softmax'))
+            decoderOutputs = self.decoderDense(decoderCInput)
 
             # Define the model 
             self.model = Model([self.encoderInput, self.decoderInput], decoderOutputs)
@@ -62,7 +58,7 @@ class TextSummarizationModel:
             self.model.summary()
             es = EarlyStopping(monitor='val_loss', mode='min', verbose = 1, patience = 2)
 
-            self.history =  self.model.fit([xTrain,yTrain[:,:-1]], yTrain.reshape(yTrain.shape[0],yTrain.shape[1], 1)[:,1:] ,epochs= 30,callbacks=[es],batch_size=128, validation_data=([xVal,yVal[:,:-1]], yVal.reshape(yVal.shape[0],yVal.shape[1], 1)[:,1:]))
+            self.history =  self.model.fit([xTrain,yTrain[:,:-1]], yTrain.reshape(yTrain.shape[0],yTrain.shape[1], 1)[:,1:] ,epochs= 5,callbacks=[es],batch_size=128, validation_data=([xVal,yVal[:,:-1]], yVal.reshape(yVal.shape[0],yVal.shape[1], 1)[:,1:]))
             
             self.model.save('textSumamrizationModel.h5')
             self.drawModelFromTraining()
@@ -73,23 +69,25 @@ class TextSummarizationModel:
         self.targetWord = tokenizerY.word_index
 
     def buildInferenceForEncoderDecoder(self):
+        
+        #################################
         self.encoderModel = Model(inputs=self.encoderInput,outputs=[self.encoderOutput, self.stateH, self.stateC])
 
         # Decoder setup
         # Below tensors will hold the states of the previous time step
-        decoderStateInputH = Input(shape=(latent_dim,))
-        decoderStateInputC = Input(shape=(latent_dim,))
-        decoderHiddenStateInput = Input(shape=(max_text_len,latent_dim))
+        decoderStateInputH = Input(shape=(300,))
+        decoderStateInputC = Input(shape=(300,))
+        decoderHiddenStateInput = Input(shape=(400,300))
 
         # To predict the next word in the sequence, set the initial states to the states from the previous time step
-        decoderOutputs2 , s, c = self.decoderLSTM(self.decL(self.decoderInput), initial_state=[decoderStateInputH, decoderStateInputC])
+        decoderOutputs2 , s, c = self.decoderLstm(self.decL(self.decoderInput), initial_state=[decoderStateInputH, decoderStateInputC])
 
         #attention inference
         aInf, aSInf = self.attnL([decoderHiddenStateInput, decoderOutputs2])
         dInfC = Concatenate(axis=-1, name='concat')([decoderOutputs2, aInf])
 
         # A dense softmax layer to generate prob dist. over the target vocabulary
-        decoderOutputs2 = decoder_dense(dInfC) 
+        decoderOutputs2 = self.decoderDense(dInfC) 
 
         # Final decoder model
         self.decoderModel = Model(
@@ -101,29 +99,29 @@ class TextSummarizationModel:
 #         self.revSourcetWordIndex = tokenizerX.index_word
 #         self.targetWord = tokenizerY.word_index
     # Encode the input as state vectors.
-        eo, eh, ec = encoder_model.predict(seq)
+        eo, eh, ec = self.encoderModel.predict(seq)
 
         # Generate empty target sequence of length 1.
         tseq = np.zeros((1,1))
 
         # Populate the first word of target sequence with the start word.
-        tseq[0, 0] = self.targetWord['_START_']
+        tseq[0, 0] = self.targetWord['beginmush']
 
         stopCondition = False
         decodedsent = ''
         while not stopCondition:
 
-            output_tokens, h, c = self.predict([tseq] + [eo, eh, ec])
+            output_tokens, h, c = self.encoderModel.predict([tseq] + [eo, eh, ec])
 
             # Sample a token
             sti = np.argmax(output_tokens[0, -1, :])
             sampleTok = self.revTargetWordIndex[sti]
 
-            if(sampleTok!='_END_'):
+            if(sampleTok!='endmush'):
                 decodedsent += ' '+sampleTok
 
             # Exit condition: either hit max length or find stop word.
-            if (sampleTok == '_END_'  or len(decodedsent.split()) >= (max_summary_len-1)):
+            if (sampleTok == 'endmush'  or len(decodedsent.split()) >= (max_summary_len-1)):
                 stopCondition = True
 
             # Update the target sequence (of length 1).
@@ -138,11 +136,11 @@ class TextSummarizationModel:
     def seq2summary(self, seq):
         newString=''
         for i in seq:
-            if((i!=0 and i!=self.targetWord['_START_']) and i!=self.targetWord['_END_']):
+            if((i!=0 and i!=self.targetWord['beginmush']) and i!=self.targetWord['endmush']):
                 newString += self.revTargetWordIndex[i]+' '
         return newString
 
-    def seq2text(seq):
+    def seq2text(self, seq):
         newString=''
         for i in seq:
             if(i!=0):
