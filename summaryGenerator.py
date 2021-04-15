@@ -49,9 +49,9 @@ class SummaryGeneratorClass:
 #             self.summaries[i] = '_START_ '+ self.textCleaner(self.summaries[i]) + ' _END_'
         self.a = []
         self.b = []
-        for i in range(0,10):
+        for i in range(len(self.news)):
             self.a.append(self.textCleaner(self.news[i]))
-        for i in range(0,10):
+        for i in range(len(self.summaries)):
             self.b.append('beginmush '+ self.textCleaner(self.summaries[i]) + ' endmush')
         self.df = pd.DataFrame({'Text': self.a, 'Summary' : self.b})
         
@@ -250,7 +250,7 @@ def main():
     summaryGeneratorClass.tokenizeTrainingData()
     print(summaryGeneratorClass.xVocabularySize)
     print(summaryGeneratorClass.yVocabularySize)
-    model = TextSummarizationModel(summaryGeneratorClass.xTrainSeq, summaryGeneratorClass.yTrainSeq, summaryGeneratorClass.xValSeq, summaryGeneratorClass.yValSeq, summaryGeneratorClass.xVocabularySize, summaryGeneratorClass.yVocabularySize,summaryGeneratorClass.maxTextLen, summaryGeneratorClass.tokenizerX, summaryGeneratorClass.tokenizerY)
+    model = TextSummarizationModel(summaryGeneratorClass.xTrainSeq, summaryGeneratorClass.yTrainSeq, summaryGeneratorClass.xValSeq, summaryGeneratorClass.yValSeq, summaryGeneratorClass.xVocabularySize, summaryGeneratorClass.yVocabularySize,summaryGeneratorClass.maxTextLen, summaryGeneratorClass.tokenizerX, summaryGeneratorClass.tokenizerY, summaryGeneratorClass.maxSummaryLen)
     
     for i in range(0, 10):
         print("Text:",model.seq2text(summaryGeneratorClass.xTrainSeq[i]))

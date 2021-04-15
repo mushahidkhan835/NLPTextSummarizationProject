@@ -14,10 +14,11 @@ from tensorflow.keras.callbacks import EarlyStopping
 import warnings
 
 class TextSummarizationModel:
-    def __init__(self, xTrain, yTrain, xVal, yVal, xVocabSize, yVocabSize, maxTextLen, tokenizerX, tokenizerY):
+    def __init__(self, xTrain, yTrain, xVal, yVal, xVocabSize, yVocabSize, maxTextLen, tokenizerX, tokenizerY, maxSummaryLen):
         self.model = self.getModel(xTrain, yTrain, xVal, yVal, xVocabSize, yVocabSize, maxTextLen)
         self.buildDictinaryToConvertIndexToWord(tokenizerX, tokenizerY)
         self.buildInferenceForEncoderDecoder()
+        self.maxSummaryLen = maxSummaryLen
         
     def drawModelFromTraining(self):
         pyplot.plot(self.history.history['loss'], label='train') 
@@ -58,7 +59,7 @@ class TextSummarizationModel:
             self.model.summary()
             es = EarlyStopping(monitor='val_loss', mode='min', verbose = 1, patience = 2)
 
-            self.history =  self.model.fit([xTrain,yTrain[:,:-1]], yTrain.reshape(yTrain.shape[0],yTrain.shape[1], 1)[:,1:] ,epochs= 5,callbacks=[es],batch_size=128, validation_data=([xVal,yVal[:,:-1]], yVal.reshape(yVal.shape[0],yVal.shape[1], 1)[:,1:]))
+            self.history =  self.model.fit([xTrain,yTrain[:,:-1]], yTrain.reshape(yTrain.shape[0],yTrain.shape[1], 1)[:,1:] ,epochs= 20,callbacks=[es],batch_size=128, validation_data=([xVal,yVal[:,:-1]], yVal.reshape(yVal.shape[0],yVal.shape[1], 1)[:,1:]))
             
             self.model.save('textSumamrizationModel.h5')
             self.drawModelFromTraining()
@@ -110,18 +111,17 @@ class TextSummarizationModel:
         stopCondition = False
         decodedsent = ''
         while not stopCondition:
-
-            output_tokens, h, c = self.encoderModel.predict([tseq] + [eo, eh, ec])
+            output_tokens, h, c = self.decoderModel.predict([tseq] + [eo, eh, ec])
 
             # Sample a token
-            sti = np.argmax(output_tokens[0, -1, :])
+            sti = np.argmax(output_tokens[0, -1, :]) + 2
             sampleTok = self.revTargetWordIndex[sti]
 
             if(sampleTok!='endmush'):
                 decodedsent += ' '+sampleTok
 
             # Exit condition: either hit max length or find stop word.
-            if (sampleTok == 'endmush'  or len(decodedsent.split()) >= (max_summary_len-1)):
+            if (sampleTok == 'endmush'  or len(decodedsent.split()) >= (self.maxSummaryLen-1)):
                 stopCondition = True
 
             # Update the target sequence (of length 1).
