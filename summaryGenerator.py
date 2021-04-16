@@ -248,12 +248,11 @@ def main():
     summaryGeneratorClass.filterDataFrameUsingMaxTextCountAndMaxSummaryCount()
     summaryGeneratorClass .splitData()
     summaryGeneratorClass.tokenizeTrainingData()
-    print(summaryGeneratorClass.xVocabularySize)
-    print(summaryGeneratorClass.yVocabularySize)
+
     model = TextSummarizationModel(summaryGeneratorClass.xTrainSeq, summaryGeneratorClass.yTrainSeq, summaryGeneratorClass.xValSeq, summaryGeneratorClass.yValSeq, summaryGeneratorClass.xVocabularySize, summaryGeneratorClass.yVocabularySize,summaryGeneratorClass.maxTextLen, summaryGeneratorClass.tokenizerX, summaryGeneratorClass.tokenizerY, summaryGeneratorClass.maxSummaryLen)
-    
-    for i in range(0, 10):
-        print("Text:",model.seq2text(summaryGeneratorClass.xTrainSeq[i]))
-        print("Original summary:",model.seq2summary(summaryGeneratorClass.yTrainSeq[i]))
-        print("Predicted summary:",model.decodeSeq(summaryGeneratorClass.xTrainSeq[i].reshape(1,summaryGeneratorClass.maxTextLen)))
+    return model
+#     for i in range(0, 10):
+#         print("Text:",model.seq2text(summaryGeneratorClass.xTrainSeq[i]))
+#         print("Original summary:",model.seq2summary(summaryGeneratorClass.yTrainSeq[i]))
+#         print("Predicted summary:",model.decodeSeq(summaryGeneratorClass.xTrainSeq[i].reshape(1,summaryGeneratorClass.maxTextLen)))
         
