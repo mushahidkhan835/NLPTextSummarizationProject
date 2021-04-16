@@ -123,44 +123,36 @@ class SummaryGeneratorClass:
 
     
     def textCount(self):
-        textCount = []
+        tCount = []
         summaryCount = []
         for string in self.df['Text']:
-            textCount.append(len(string.split()))
+            tCount.append(len(string.split()))
             
         for sent in self.df['Summary']:
             summaryCount.append(len(sent.split()))
             
 
         graph = pd.DataFrame()
-        graph['Text']= textCount
+        graph['Text']= tCount
         graph['Summary'] = summaryCount
        
         graph.hist(bins = 100)
         plt.show()
         
-        self.summaryCount = 0
-        for i in self.df['Summary']:
-            if(len(i.split()) <= 300):
-                self.summaryCount += 1
-        
-        self.textCount = 0
-        for i in self.df['Text']:
-            if(len(i.split()) <= 400):
-                self.textCount += 1
-     
         self.maxTextLen = 400
-        self.maxSummaryLen = 400
+        self.maxSummaryLen = 200
         
         cnt=0
         for i in self.df['Summary']:
-            if(len(i.split())<=400):
+            if(len(i.split())<=self.maxSummaryLen):
                 cnt=cnt+1
         print(cnt/len(self.df['Summary']))
 
         cnt=0
         for i in self.df['Text']:
-            if(len(i.split())<=400):
+            print(len(i.split()))
+            print((self.maxTextLen))
+            if(len(i.split())<=self.maxTextLen):
                 cnt=cnt+1
         print(cnt/len(self.df['Text']))
 

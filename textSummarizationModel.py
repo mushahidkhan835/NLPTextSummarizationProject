@@ -15,6 +15,10 @@ import warnings
 
 class TextSummarizationModel:
     def __init__(self, xTrain, yTrain, xVal, yVal, xVocabSize, yVocabSize, maxTextLen, tokenizerX, tokenizerY, maxSummaryLen):
+        self.xTrain = xTrain
+        self.yTrain = yTrain
+        self.xVal = xVal
+        self.yVal = yVal
         self.model = self.getModel(xTrain, yTrain, xVal, yVal, xVocabSize, yVocabSize, maxTextLen)
         self.buildDictinaryToConvertIndexToWord(tokenizerX, tokenizerY)
         self.buildInferenceForEncoderDecoder()
@@ -59,7 +63,7 @@ class TextSummarizationModel:
             self.model.summary()
             es = EarlyStopping(monitor='val_loss', mode='min', verbose = 1, patience = 2)
 
-            self.history =  self.model.fit([xTrain,yTrain[:,:-1]], yTrain.reshape(yTrain.shape[0],yTrain.shape[1], 1)[:,1:] ,epochs= 1,callbacks=[es],batch_size=128, validation_data=([xVal,yVal[:,:-1]], yVal.reshape(yVal.shape[0],yVal.shape[1], 1)[:,1:]))
+            self.history =  self.model.fit([xTrain,yTrain[:,:-1]], yTrain.reshape(yTrain.shape[0],yTrain.shape[1], 1)[:,1:] ,epochs= 5,callbacks=[es],batch_size=256, validation_data=([xVal,yVal[:,:-1]], yVal.reshape(yVal.shape[0],yVal.shape[1], 1)[:,1:]))
             
             self.model.save('textSumamrizationModel.h5')
             self.drawModelFromTraining()
@@ -101,6 +105,10 @@ class TextSummarizationModel:
 #         self.targetWord = tokenizerY.word_index
     # Encode the input as state vectors.
         eo, eh, ec = self.encoderModel.predict(seq)
+        print("EO EH EC")
+        print(eo)
+        print(eh)
+        print(ec)
 
         # Generate empty target sequence of length 1.
         tseq = np.zeros((1,1))
@@ -111,11 +119,16 @@ class TextSummarizationModel:
         stopCondition = False
         decodedsent = ''
         while not stopCondition:
-            output_tokens, h, c = self.decoderModel.predict([tseq] + [eo, eh, ec])
 
+            
+            output_tokens, h, c = self.decoderModel.predict([tseq] + [eo, eh, ec])
+            print("TOKEN OUTPUTS")
+            print(output_tokens)
             # Sample a token
-            sti = np.argmax(output_tokens[0, -1, :]) + 2
+            sti = np.argmax(output_tokens[0, -1, :])
+
             sampleTok = self.revTargetWordIndex[sti]
+            
 
             if(sampleTok!='endmush'):
                 decodedsent += ' '+sampleTok
